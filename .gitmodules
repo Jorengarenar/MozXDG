@@ -1,0 +1,6 @@
+[submodule "extern/libProgWrap"]
+	path = extern/libProgWrap
+	url = https://github.com/Jorengarenar/libProgWrap.git
+[submodule "extern/libJCBC"]
+	path = extern/libJCBC
+	url = git@github.com:Jorengarenar/libJCBC.git
