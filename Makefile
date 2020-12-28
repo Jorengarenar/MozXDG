@@ -46,7 +46,7 @@ $(PROPGWRAP_H):
 	cd $(EXTERN_DIR)/libProgWrap && LIBDIR=$(BUILD_DEPSDIR)/lib INCLUDEDIR=$(BUILD_DEPSDIR)/include ./install.sh -l c
 
 $(LIBJCBC_A):
-	cd $(EXTERN_DIR)/libJCBC && ./autogen.sh --prefix=$(BUILD_DEPSDIR) && cd build && make install
+	cd $(EXTERN_DIR)/libJCBC && cmake -B build && cmake --build build && cmake --install build --prefix $(BUILD_DEPSDIR)
 
 
 $(TARGET): main.c

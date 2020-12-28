@@ -11,7 +11,7 @@
 
 #define PROGNAME "MozXDG"
 
-#define VARSION  "0.8.3"
+#define VARSION  "0.8.4"
 
 const char* xdg_data_home;
 
