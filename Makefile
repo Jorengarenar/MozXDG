@@ -38,19 +38,15 @@ release: CFLAGS += -O2
 release: all
 
 PROPGWRAP_H := $(BUILD_DEPSDIR)/include/progwrap.h
-LIBJCBC_A   := $(BUILD_DEPSDIR)/lib/libjcbc.a
 
-deps: $(PROPGWRAP_H) $(LIBJCBC_A)
+deps: $(PROPGWRAP_H)
 
 $(PROPGWRAP_H):
 	cd $(EXTERN_DIR)/libProgWrap && LIBDIR=$(BUILD_DEPSDIR)/lib INCLUDEDIR=$(BUILD_DEPSDIR)/include ./install.sh -l c
 
-$(LIBJCBC_A):
-	cd $(EXTERN_DIR)/libJCBC && cmake -B build && cmake --build build && cmake --install build --prefix $(BUILD_DEPSDIR)
-
 
 $(TARGET): main.c
-	$(CC) $(CFLAGS) $(INCLUDE) -o $(TARGET) main.c $(LIBJCBC_A) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(INCLUDE) -o $(TARGET) main.c sys_helpers.c $(LDFLAGS)
 
 run: all
 	$(TARGET) $(RUN_ARGS)

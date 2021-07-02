@@ -6,12 +6,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <jcbc/sys.h>
+#include "sys_helpers.h"
 #include <progwrap.h>
 
 #define PROGNAME "MozXDG"
 
-#define VARSION  "0.8.4"
+#define VARSION  "0.8.5"
 
 const char* xdg_data_home;
 
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     /* Init XDG_DATA_HOME */ {
         char fallback[PATH_MAX];
         snprintf(fallback, PATH_MAX, "%s%s", getenv("HOME"), "/.local/share");
-        xdg_data_home = jcbc_getenv("XDG_DATA_HOME", fallback);
+        xdg_data_home = helper_getenv("XDG_DATA_HOME", fallback);
     }
 
     int p = 0; // profile position in arguments
@@ -104,7 +104,7 @@ void createProfileDir(const char* path)
 {
     // Create dir for profile if doesn't already exist
     if (access(path, F_OK) != 0) {
-        condExit(jcbc_mkdir_p(path) < 0);
+        condExit(helper_mkdir_p(path) < 0);
     }
 }
 
@@ -113,7 +113,7 @@ void handleMozillaDir()
     char dir[BUFSIZ]; // "~/.mozilla"
     snprintf(dir, BUFSIZ, "%s%s", getenv("HOME"), "/.mozilla");
 
-    char mode = jcbc_getenv("MOZXDG_MODE", "1")[0];
+    char mode = helper_getenv("MOZXDG_MODE", "1")[0];
 
     switch (mode) {
         case '1': // temporary symlinking
@@ -123,7 +123,7 @@ void handleMozillaDir()
             while (getppid() != 1) {
                 sleep(1);
                 if (access(dir, F_OK) == 0) {
-                    jcbc_rm('r', "%s", dir);
+                    helper_rm('r', "%s", dir);
                 }
             }
             break;
@@ -136,7 +136,7 @@ void tempLinking(const char* dir)
 {
     char foo[PATH_MAX];
     snprintf(foo, PATH_MAX, "%s%s", xdg_data_home, "/mozilla");
-    jcbc_mkdir_p(foo);
+    helper_mkdir_p(foo);
 
     // Check if symlink already exists
     char temp[PATH_MAX];
@@ -155,7 +155,7 @@ void tempLinking(const char* dir)
     // Check again if symlink still points to correct location, then remove it
     readlink(dir, temp, PATH_MAX);
     if (strcmp(temp, foo) == 0) {
-        jcbc_rm('r', "%s", dir);
+        helper_rm('r', "%s", dir);
     }
 }
 
